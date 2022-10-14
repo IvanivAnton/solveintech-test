@@ -461,6 +461,9 @@
                 </div>
                 <div class="form-group">
                     <label>Password</label>
+                    @error('password')
+                    <label for="password" class="error">{{ $message }}</label>
+                    @enderror
                     <input name="password" class="form-control" type="password">
                 </div>
                 <button type="submit">Login</button>

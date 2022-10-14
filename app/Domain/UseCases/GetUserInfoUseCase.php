@@ -27,10 +27,6 @@ class GetUserInfoUseCase
     {
         $userIsLogged = $this->authService->isLogged();
 
-        $apiToken = null;
-        if ($userIsLogged) {
-            $apiToken = $this->authService->user()->getApiToken();
-        }
         $loginUrl = route('login');
         $logoutUrl = route('logout');
         $registerUrl = route('register');
@@ -38,7 +34,6 @@ class GetUserInfoUseCase
 
         return $this->output->success(new GetUserInfoOutputModel(
             isUserLogged: $userIsLogged,
-            apiToken: $apiToken,
             loginUrl: $loginUrl,
             logoutUrl: $logoutUrl,
             registerUrl: $registerUrl,

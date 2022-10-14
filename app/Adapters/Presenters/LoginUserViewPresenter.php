@@ -15,6 +15,6 @@ class LoginUserViewPresenter implements \App\Domain\Output\LoginUserOutputInterf
 
     public function authFailed(): Response
     {
-       return back()->with('message', 'Login or email is incorrect');
+       return back()->withErrors(['password' => 'Login or email is incorrect']);
     }
 }

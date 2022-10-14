@@ -15,7 +15,6 @@ class GetUserInfoViewPresenter implements \App\Domain\Output\GetUserInfoOutputIn
             'index',
             [
                 'isUserLogged' => $model->isUserLogged(),
-                'apiToken' => $model->getApiToken(),
                 'loginUrl' => $model->getLoginUrl(),
                 'registerUrl' => $model->getRegisterUrl(),
                 'regenerateTokenUrl' => $model->getRegenerateTokenUrl(),

@@ -47,11 +47,6 @@ class User extends Authenticatable implements UserEntityInterface
         return $this->attributes['email'];
     }
 
-    public function getApiToken(): string
-    {
-        return $this->tokens()->first()->token;
-    }
-
     public function getPassword(): string
     {
         return $this->attributes['password'];

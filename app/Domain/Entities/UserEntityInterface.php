@@ -9,5 +9,4 @@ interface UserEntityInterface extends HasApiTokens, Authenticatable
 {
     public function getEmail(): string;
     public function getPassword(): string;
-    public function getApiToken(): string;
 }
