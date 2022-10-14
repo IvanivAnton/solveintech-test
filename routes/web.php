@@ -1,18 +1,11 @@
 <?php
 
+use App\Http\Controllers\UserPage;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::post('/register', [UserPage\RegisterUserController::class, '__invoke'])->name('register');
+Route::post('/login', UserPage\LoginUserController::class)->name('login');
+Route::post('/logout', UserPage\LogoutUserController::class)->name('logout');
+Route::post('/regenerate-token', UserPage\GenerateApiTokenController::class)->name('regenerateToken');
+Route::get('/', UserPage\IndexController::class)->name('index');

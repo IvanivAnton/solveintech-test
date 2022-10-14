@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    justify-content: space-around;
+    margin: 0 15vw;
+}
+.login-form {
+    width: 20vw;
+}
+.register-form {
+    width: 20vw;
+}
+.form-control {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    height: 27px;
+    font-size: 15px;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+.api-token-form {
+    width: 25vw;
+}
+.logout-form {
+    display: flex;
+    align-items: center;
+    width: 10vw;
+}
+.logout {
+    width: 100px;
+    height: 50px;
+}
