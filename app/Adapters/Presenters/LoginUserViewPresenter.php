@@ -2,19 +2,23 @@
 
 namespace App\Adapters\Presenters;
 
+use App\Adapters\ViewModels\ViewResponseViewModel;
+use App\Domain\Entities\ViewModelInterface;
 use Illuminate\Http\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 
-class LoginUserViewPresenter implements \App\Domain\Output\LoginUserOutputInterface
+class LoginUserViewPresenter implements \App\Domain\OutputInterfaces\LoginUserOutputInterface
 {
-
-    public function authenticated(): Response
+    public function authenticated(): ViewModelInterface
     {
-        return new RedirectResponse(route('index'));
+        return new ViewResponseViewModel(
+            new RedirectResponse(route('index'))
+        );
     }
 
-    public function authFailed(): Response
+    public function authFailed(): ViewModelInterface
     {
-       return back()->withErrors(['password' => 'Login or email is incorrect']);
+       return new ViewResponseViewModel(
+           back()->withErrors(['password' => 'Login or email is incorrect'])
+       );
     }
 }

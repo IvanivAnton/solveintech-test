@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\InputParams;
+namespace App\Domain\DTO\Input;
 
-class GetQuotationsInputParams
+class GetQuotationsInputDTO
 {
     /**
      * @param string $date

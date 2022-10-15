@@ -2,24 +2,24 @@
 
 namespace App\Domain\UseCases;
 
-use App\Domain\Output\GenerateApiTokenOutputInterface;
-use App\Domain\OutputModels\GenerateApiTokenOutputModel;
+use App\Domain\DTO\Output\GenerateApiTokenOutputDTO;
+use App\Domain\Entities\ViewModelInterface;
+use App\Domain\OutputInterfaces\GenerateApiTokenOutputInterface;
+use App\Domain\ServiceInterfaces\AuthServiceInterface;
 use App\Repositories\UserRepository;
-use App\Services\AuthService;
-use Symfony\Component\HttpFoundation\Response;
 
 class GenerateApiTokensUseCase
 {
-    private AuthService $authService;
+    private AuthServiceInterface $authService;
     private UserRepository $repository;
     private GenerateApiTokenOutputInterface $output;
 
     /**
-     * @param AuthService $authService
+     * @param AuthServiceInterface $authService
      * @param UserRepository $repository
      * @param GenerateApiTokenOutputInterface $output
      */
-    public function __construct(AuthService $authService, UserRepository $repository, GenerateApiTokenOutputInterface $output)
+    public function __construct(AuthServiceInterface $authService, UserRepository $repository, GenerateApiTokenOutputInterface $output)
     {
         $this->authService = $authService;
         $this->repository = $repository;
@@ -27,12 +27,12 @@ class GenerateApiTokensUseCase
     }
 
 
-    public function handle(): Response
+    public function handle(): ViewModelInterface
     {
         $user = $this->authService->user();
         $this->repository->dropApiTokens($user);
         $token = $this->repository->createApiToken($user);
 
-        return $this->output->generated(new GenerateApiTokenOutputModel(token: $token));
+        return $this->output->generated(new GenerateApiTokenOutputDTO(token: $token));
     }
 }

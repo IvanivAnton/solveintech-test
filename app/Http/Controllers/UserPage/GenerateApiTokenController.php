@@ -18,7 +18,7 @@ class GenerateApiTokenController extends \App\Http\Controllers\Controller
 
     public function __invoke(): \Symfony\Component\HttpFoundation\Response
     {
-        return $this->useCase->handle();
+        return $this->useCase->handle()->getResponse();
     }
 
 }

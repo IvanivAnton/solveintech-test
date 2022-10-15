@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\InputParams;
+namespace App\Domain\DTO\Input;
 
-class LoginUserInputParams
+class RegisterUserInputDTO
 {
     private string $email;
     private string $password;

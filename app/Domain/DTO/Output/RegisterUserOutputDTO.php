@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\OutputModels;
+namespace App\Domain\DTO\Output;
 
-class RegisterUserOutputModel
+class RegisterUserOutputDTO
 {
     /**
      * @param string $token

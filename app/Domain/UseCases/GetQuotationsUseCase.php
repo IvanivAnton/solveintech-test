@@ -2,41 +2,40 @@
 
 namespace App\Domain\UseCases;
 
-use App\Domain\InputParams\GetQuotationsInputParams;
-use App\Domain\Output\GetQuotationsOutputInterface;
-use App\Domain\OutputModels\GetQuotationsResponseModel;
-use App\Helpers\CbrClient;
-use App\Services\XmlParser;
-use Symfony\Component\HttpFoundation\Response;
+use App\Domain\DTO\Input\GetQuotationsInputDTO;
+use App\Domain\DTO\Output\GetQuotationsOutputDTO;
+use App\Domain\Entities\ViewModelInterface;
+use App\Domain\OutputInterfaces\GetQuotationsOutputInterface;
+use App\Domain\ServiceInterfaces\QuotationsServiceInterface;
+use App\Domain\ServiceInterfaces\XmlParserServiceInterface;
 
 class GetQuotationsUseCase
 {
-    private CbrClient $client;
+    private QuotationsServiceInterface $quotationsSource;
     private GetQuotationsOutputInterface $output;
-    private XmlParser $parser;
 
     /**
-     * @param CbrClient $client
+     * @param QuotationsServiceInterface $quotationsSource
      * @param GetQuotationsOutputInterface $output
-     * @param XmlParser $parser
      */
-    public function __construct(CbrClient $client, GetQuotationsOutputInterface $output, XmlParser $parser)
+    public function __construct(
+        QuotationsServiceInterface   $quotationsSource,
+        GetQuotationsOutputInterface $output,
+    )
     {
-        $this->client = $client;
+        $this->quotationsSource = $quotationsSource;
         $this->output = $output;
-        $this->parser = $parser;
     }
 
 
-    public function handle(GetQuotationsInputParams $inputParams): Response
+    public function handle(GetQuotationsInputDTO $inputParams): ViewModelInterface
     {
-        $xmlData = $this->client->getQuotations($inputParams->getDate());
-        $data = $this->parser->parse($xmlData);
-        if(empty($data['Valute'])) {
-            return $this->output->noData(new GetQuotationsResponseModel(null));
+        $quotations = $this->quotationsSource->getQuotations($inputParams->getDate());
+
+        if($quotations->isEmpty()) {
+            return $this->output->noData(new GetQuotationsOutputDTO(null));
         }
 
-
-        return $this->output->success(new GetQuotationsResponseModel($data));
+        return $this->output->success(new GetQuotationsOutputDTO($quotations->getData()));
     }
 }

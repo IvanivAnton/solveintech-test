@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Domain\InputParams\GetQuotationsInputParams;
+use App\Domain\DTO\Input\GetQuotationsInputDTO;
 use App\Domain\UseCases\GetQuotationsUseCase;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +22,6 @@ class GetQuotationsController extends Controller
 
     public function __invoke(string $date): Response
     {
-        return $this->useCase->handle(new GetQuotationsInputParams(date: $date));
+        return $this->useCase->handle(new GetQuotationsInputDTO(date: $date))->getResponse();
     }
 }

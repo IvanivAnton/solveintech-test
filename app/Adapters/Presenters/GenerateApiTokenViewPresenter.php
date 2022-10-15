@@ -2,16 +2,19 @@
 
 namespace App\Adapters\Presenters;
 
-use App\Domain\OutputModels\GenerateApiTokenOutputModel;
+use App\Adapters\ViewModels\ViewResponseViewModel;
+use App\Domain\DTO\Output\GenerateApiTokenOutputDTO;
+use App\Domain\Entities\ViewModelInterface;
 use Illuminate\Http\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 
-class GenerateApiTokenViewPresenter implements \App\Domain\Output\GenerateApiTokenOutputInterface
+class GenerateApiTokenViewPresenter implements \App\Domain\OutputInterfaces\GenerateApiTokenOutputInterface
 {
-    public function generated(GenerateApiTokenOutputModel $model): Response
+    public function generated(GenerateApiTokenOutputDTO $model): ViewModelInterface
     {
-        return (new RedirectResponse(route('index')))->withCookie(
+        $redirectResponse = (new RedirectResponse(route('index')))->withCookie(
             cookie('token', $model->getToken())
         );
+
+        return new ViewResponseViewModel($redirectResponse);
     }
 }

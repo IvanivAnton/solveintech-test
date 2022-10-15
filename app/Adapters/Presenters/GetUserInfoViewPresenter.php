@@ -2,16 +2,16 @@
 
 namespace App\Adapters\Presenters;
 
-use App\Domain\OutputModels\GetUserInfoOutputModel;
+use App\Adapters\ViewModels\ViewResponseViewModel;
+use App\Domain\DTO\Output\GetUserInfoOutputDTO;
+use App\Domain\Entities\ViewModelInterface;
 use Illuminate\Support\Facades\View;
-use Symfony\Component\HttpFoundation\Response;
 
-class GetUserInfoViewPresenter implements \App\Domain\Output\GetUserInfoOutputInterface
+class GetUserInfoViewPresenter implements \App\Domain\OutputInterfaces\GetUserInfoOutputInterface
 {
-
-    public function success(GetUserInfoOutputModel $model): Response
+    public function success(GetUserInfoOutputDTO $model): ViewModelInterface
     {
-        return new \Illuminate\Http\Response(View::make(
+        $response = new \Illuminate\Http\Response(View::make(
             'index',
             [
                 'isUserLogged' => $model->isUserLogged(),
@@ -21,5 +21,6 @@ class GetUserInfoViewPresenter implements \App\Domain\Output\GetUserInfoOutputIn
                 'logoutUrl'  => $model->getLogoutUrl(),
             ]
         ));
+        return new ViewResponseViewModel($response);
     }
 }

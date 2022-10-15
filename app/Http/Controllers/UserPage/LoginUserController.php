@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\UserPage;
 
-use App\Domain\InputParams\LoginUserInputParams;
+use App\Domain\DTO\Input\LoginUserInputDTO;
 use App\Domain\UseCases\LoginUserUseCase;
 use App\Http\Requests\LoginUserRequest;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,10 +23,10 @@ class LoginUserController
     public function __invoke(LoginUserRequest $request): Response
     {
         $validated = $request->validated();
-        return $this->useCase->handle(new LoginUserInputParams(
+        return $this->useCase->handle(new LoginUserInputDTO(
             email: $validated['email'],
             password: $validated['password'],
-        ));
+        ))->getResponse();
     }
 
 }

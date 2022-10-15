@@ -3,10 +3,11 @@
 namespace App\Services;
 
 use App\Domain\Entities\UserEntityInterface;
+use App\Domain\ServiceInterfaces\AuthServiceInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-class AuthService
+class AuthService implements AuthServiceInterface
 {
     public function isLogged(): bool
     {
@@ -21,7 +22,12 @@ class AuthService
 
     public function attempt(UserEntityInterface $user): bool
     {
-        return Auth::attempt(['email' => $user->getEmail(), 'password' => $user->getPassword()]);
+        $result = Auth::attempt(['email' => $user->getEmail(), 'password' => $user->getPassword()]);
+        if($result) {
+            session()->regenerate();
+        }
+
+        return $result;
     }
 
     public function user(): UserEntityInterface

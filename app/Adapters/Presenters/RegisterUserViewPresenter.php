@@ -2,16 +2,17 @@
 
 namespace App\Adapters\Presenters;
 
-use App\Domain\OutputModels\RegisterUserOutputModel;
+use App\Adapters\ViewModels\ViewResponseViewModel;
+use App\Domain\DTO\Output\RegisterUserOutputDTO;
+use App\Domain\Entities\ViewModelInterface;
 use Illuminate\Http\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 
-class RegisterUserViewPresenter implements \App\Domain\Output\RegisterUserOutputInterface
+class RegisterUserViewPresenter implements \App\Domain\OutputInterfaces\RegisterUserOutputInterface
 {
-    public function registered(RegisterUserOutputModel $model): Response
+    public function registered(RegisterUserOutputDTO $model): ViewModelInterface
     {
-        return (new RedirectResponse(route('index')))->withCookie(
+        return new ViewResponseViewModel((new RedirectResponse(route('index')))->withCookie(
             cookie: cookie('token', $model->getToken())
-        );
+        ));
     }
 }

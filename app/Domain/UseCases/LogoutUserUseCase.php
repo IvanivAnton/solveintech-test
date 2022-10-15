@@ -2,29 +2,27 @@
 
 namespace App\Domain\UseCases;
 
-use App\Domain\Output\LogoutUserOutputInterface;
-use App\Services\AuthService;
-use Illuminate\Cookie\CookieJar;
-use Illuminate\Support\Facades\Cookie;
-use Symfony\Component\HttpFoundation\Response;
+use App\Domain\Entities\ViewModelInterface;
+use App\Domain\OutputInterfaces\LogoutUserOutputInterface;
+use App\Domain\ServiceInterfaces\AuthServiceInterface;
 
 class LogoutUserUseCase
 {
-    private AuthService $authService;
+    private AuthServiceInterface $authService;
     private LogoutUserOutputInterface $output;
 
     /**
-     * @param AuthService $authService
+     * @param AuthServiceInterface $authService
      * @param LogoutUserOutputInterface $output
      */
-    public function __construct(AuthService $authService, LogoutUserOutputInterface $output)
+    public function __construct(AuthServiceInterface $authService, LogoutUserOutputInterface $output)
     {
         $this->authService = $authService;
         $this->output = $output;
     }
 
 
-    public function handle(): Response
+    public function handle(): ViewModelInterface
     {
         $this->authService->logout();
         return $this->output->loggedOut();

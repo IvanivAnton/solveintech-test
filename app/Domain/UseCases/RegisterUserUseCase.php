@@ -2,29 +2,34 @@
 
 namespace App\Domain\UseCases;
 
-use App\Domain\InputParams\RegisterUserInputParams;
-use App\Domain\Output\RegisterUserOutputInterface;
-use App\Domain\OutputModels\RegisterUserOutputModel;
+use App\Domain\DTO\Input\RegisterUserInputDTO;
+use App\Domain\DTO\Output\RegisterUserOutputDTO;
+use App\Domain\Entities\ViewModelInterface;
+use App\Domain\OutputInterfaces\RegisterUserOutputInterface;
+use App\Domain\ServiceInterfaces\AuthServiceInterface;
 use App\Factories\UserFactory;
 use App\Repositories\UserRepository;
-use App\Services\AuthService;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\HttpFoundation\Response;
 
 class RegisterUserUseCase
 {
     private UserFactory $factory;
     private UserRepository $repository;
     private RegisterUserOutputInterface $output;
-    private AuthService $authService;
+    private AuthServiceInterface $authService;
 
     /**
      * @param UserFactory $factory
      * @param UserRepository $repository
      * @param RegisterUserOutputInterface $output
-     * @param AuthService $authService
+     * @param AuthServiceInterface $authService
      */
-    public function __construct(UserFactory $factory, UserRepository $repository, RegisterUserOutputInterface $output, AuthService $authService)
+    public function __construct(
+        UserFactory $factory,
+        UserRepository $repository,
+        RegisterUserOutputInterface $output,
+        AuthServiceInterface $authService
+    )
     {
         $this->factory = $factory;
         $this->repository = $repository;
@@ -32,20 +37,21 @@ class RegisterUserUseCase
         $this->authService = $authService;
     }
 
-    public function handle(RegisterUserInputParams $inputParams): Response
+    public function handle(RegisterUserInputDTO $inputParams): ViewModelInterface
     {
         $user = $this->factory->make([
             'email' => $inputParams->getEmail(),
             'password' => $inputParams->getPassword()
         ]);
+
         $token = '';
-        DB::transaction(function () use (&$user, &$token){
+        DB::transaction(function () use (&$user, &$token) {
             $user = $this->repository->save($user);
             $token = $this->repository->createApiToken($user);
         });
 
         $this->authService->login($user);
 
-        return $this->output->registered(new RegisterUserOutputModel($token));
+        return $this->output->registered(new RegisterUserOutputDTO($token));
     }
 }

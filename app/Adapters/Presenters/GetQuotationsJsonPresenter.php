@@ -2,19 +2,25 @@
 
 namespace App\Adapters\Presenters;
 
-use App\Domain\OutputModels\GetQuotationsResponseModel;
+use App\Adapters\ViewModels\JsonResponseViewModel;
+use App\Domain\DTO\Output\GetQuotationsOutputDTO;
+use App\Domain\Entities\ViewModelInterface;
+use App\Domain\OutputInterfaces\GetQuotationsOutputInterface;
 use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 
-class GetQuotationsJsonPresenter implements \App\Domain\Output\GetQuotationsOutputInterface
+class GetQuotationsJsonPresenter implements GetQuotationsOutputInterface
 {
-    public function success(GetQuotationsResponseModel $model): Response
+    public function success(GetQuotationsOutputDTO $model): ViewModelInterface
     {
-        return new JsonResponse($model->getData());
+        return new JsonResponseViewModel(
+            new JsonResponse($model->getData())
+        );
     }
 
-    public function noData(GetQuotationsResponseModel $model): Response
+    public function noData(GetQuotationsOutputDTO $model): ViewModelInterface
     {
-        return new JsonResponse(null, 404);
+        return new JsonResponseViewModel(
+            new JsonResponse(null, 404)
+        );
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
-class XmlParser
+use App\Domain\ServiceInterfaces\XmlParserServiceInterface;
+
+class XmlParserService implements XmlParserServiceInterface
 {
     public function parse(string $xml): array
     {

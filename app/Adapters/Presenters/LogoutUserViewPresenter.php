@@ -2,13 +2,16 @@
 
 namespace App\Adapters\Presenters;
 
+use App\Adapters\ViewModels\ViewResponseViewModel;
+use App\Domain\Entities\ViewModelInterface;
 use Illuminate\Http\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 
-class LogoutUserViewPresenter implements \App\Domain\Output\LogoutUserOutputInterface
+class LogoutUserViewPresenter implements \App\Domain\OutputInterfaces\LogoutUserOutputInterface
 {
-    public function loggedOut(): Response
+    public function loggedOut(): ViewModelInterface
     {
-        return (new RedirectResponse(route('index')))->withCookie('token');
+        return new ViewResponseViewModel(
+            (new RedirectResponse(route('index')))->withCookie('token')
+        );
     }
 }

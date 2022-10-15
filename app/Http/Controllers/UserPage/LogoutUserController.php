@@ -20,7 +20,7 @@ class LogoutUserController extends \App\Http\Controllers\Controller
 
     public function __invoke(): Response
     {
-       return $this->useCase->handle();
+       return $this->useCase->handle()->getResponse();
     }
 
 }

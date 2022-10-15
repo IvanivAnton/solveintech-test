@@ -2,28 +2,28 @@
 
 namespace App\Domain\UseCases;
 
-use App\Domain\Output\GetUserInfoOutputInterface;
-use App\Domain\OutputModels\GetUserInfoOutputModel;
-use App\Services\AuthService;
-use Symfony\Component\HttpFoundation\Response;
+use App\Domain\DTO\Output\GetUserInfoOutputDTO;
+use App\Domain\Entities\ViewModelInterface;
+use App\Domain\OutputInterfaces\GetUserInfoOutputInterface;
+use App\Domain\ServiceInterfaces\AuthServiceInterface;
 
 class GetUserInfoUseCase
 {
-    private AuthService $authService;
+    private AuthServiceInterface $authService;
     private GetUserInfoOutputInterface $output;
 
     /**
-     * @param AuthService $authService
+     * @param AuthServiceInterface $authService
      * @param GetUserInfoOutputInterface $output
      */
-    public function __construct(AuthService $authService, GetUserInfoOutputInterface $output)
+    public function __construct(AuthServiceInterface $authService, GetUserInfoOutputInterface $output)
     {
         $this->authService = $authService;
         $this->output = $output;
     }
 
 
-    public function handle(): Response
+    public function handle(): ViewModelInterface
     {
         $userIsLogged = $this->authService->isLogged();
 
@@ -32,7 +32,7 @@ class GetUserInfoUseCase
         $registerUrl = route('register');
         $regenerateTokenUrl = route('regenerateToken');
 
-        return $this->output->success(new GetUserInfoOutputModel(
+        return $this->output->success(new GetUserInfoOutputDTO(
             isUserLogged: $userIsLogged,
             loginUrl: $loginUrl,
             logoutUrl: $logoutUrl,
